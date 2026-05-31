@@ -18,6 +18,9 @@ export interface UserProfile {
   av: string;
 }
 
+const API_BASE = import.meta.env.VITE_API_URL ?? 'https://soft-eng-project-trashform.vercel.app';
+
+
 export const DEFAULT_PROFILE: UserProfile = {
   name: 'EEVEE',
   username: '@eeve_berkarya',
@@ -68,6 +71,7 @@ interface ProfileContextType {
   profile: UserProfile;
   isLoggedIn: boolean;
   sessionKey: number;
+  isAuthLoading: boolean  // tambah ini
   updateProfile: (updates: ProfileUpdate) => void;
   logout: () => void;
   login: (email: string, password: string) => Promise<any> 
@@ -75,6 +79,7 @@ interface ProfileContextType {
   isOwnPost: (author: string, authorId?: string) => boolean;
   isOwnComment: (author: string, authorId?: string) => boolean;
   authFetch: (url: string, options?: RequestInit) => Promise<Response>;
+
 
 }
 
@@ -192,7 +197,7 @@ const login = async (email: string, password: string) => {
 
   // ✅ Fetch profile dari API setelah login
   try {
-    const res = await fetch('http://localhost:8000/profile/me', {
+    const res = await fetch(`${API_BASE}/profile/me`, {
       headers: { Authorization: `Bearer ${data.session.access_token}` },
     });
     if (res.ok) {

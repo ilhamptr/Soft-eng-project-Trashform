@@ -41,6 +41,8 @@ interface PostsContextType {
 }
 
 const PostsContext = createContext<PostsContextType | undefined>(undefined);
+const API_BASE  = import.meta.env.VITE_API_URL ?? 'https://soft-eng-project-trashform.vercel.app';
+
 
 interface PostsProviderProps {
   children: ReactNode;
@@ -65,7 +67,7 @@ export function PostsProvider({ children }: PostsProviderProps) {
   const fetchPosts = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await authFetch('http://localhost:8000/home', {
+      const response = await authFetch(`${API_BASE}/home`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -164,7 +166,7 @@ export function PostsProvider({ children }: PostsProviderProps) {
     );
 
     try {
-      const res = await authFetch(`http://localhost:8000/posts/${id}/likes`, {
+      const res = await authFetch(`${API_BASE}/posts/${id}/likes`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -196,7 +198,7 @@ export function PostsProvider({ children }: PostsProviderProps) {
     const token = localStorage.getItem('token');
 
     try {
-      const res = await authFetch(`http://localhost:8000/posts/${postId}/comments`, {
+      const res = await authFetch(`${API_BASE}/posts/${postId}/comments`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -248,7 +250,7 @@ export function PostsProvider({ children }: PostsProviderProps) {
     );
 
     try {
-      const res = await authFetch(`http://localhost:8000/posts/${id}/save`, {
+      const res = await authFetch(`${API_BASE}/posts/${id}/save`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
       });

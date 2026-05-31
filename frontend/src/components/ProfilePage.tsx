@@ -242,6 +242,8 @@ import EditProfileModal from './EditProfileModal';
 import PostDetailModal from './PostDetailModal';
 
 const TABS = ['Postingan'];
+const API_BASE = import.meta.env.VITE_API_URL ?? 'https://soft-eng-project-trashform.vercel.app';
+
 
 interface ProfileData {
   userId: string;
@@ -277,7 +279,7 @@ export default function ProfilePage({ onViewProfile }: ProfilePageProps) {
     const fetchProfile = async () => {
       setLoading(true);
       try {
-        const res = await authFetch('http://localhost:8000/profile/me', {
+        const res = await authFetch(`${API_BASE}/profile/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error('Failed to fetch profile');

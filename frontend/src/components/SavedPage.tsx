@@ -233,6 +233,7 @@ import PostCard from './PostCard';
 import {useProfile } from '../context/ProfileContext';
 
 
+const API_BASE = import.meta.env.VITE_API_URL ?? 'https://soft-eng-project-trashform.vercel.app';
 
 type SavedFilter = 'all' | 'community';
 
@@ -251,7 +252,7 @@ export default function SavedPage() {
     const fetchSaved = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await authFetch('http://localhost:8000/saved', {
+        const res = await authFetch(`${API_BASE}/saved`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error('Failed');
@@ -274,7 +275,7 @@ export default function SavedPage() {
   const handleUnsave = async (postId: string) => {
     const token = localStorage.getItem('token');
     try {
-      await authFetch(`http://localhost:8000/posts/${postId}/save`, {
+      await authFetch(`${API_BASE}/posts/${postId}/save`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
       });

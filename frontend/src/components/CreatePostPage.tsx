@@ -5,6 +5,7 @@ import { useProfile, CURRENT_USER_ID } from '../context/ProfileContext';
 import type { TrashType } from '../App';
 
 const CATEGORY_OPTIONS = ['Plastik', 'Kardus', 'Kaca', 'Kayu', 'Logam', 'Lainnya'];
+const API_BASE = import.meta.env.VITE_API_URL ?? 'https://soft-eng-project-trashform.vercel.app';
 
 // Utility function untuk convert File ke base64
 const fileToBase64 = (file: File): Promise<string> => {
@@ -102,7 +103,7 @@ export default function CreatePostPage({ onBackToFeed }: CreatePostPageProps) {
       formData.append("for_sale", "false")
 
       const response = await authFetch(
-          "http://localhost:8000/upload-post",
+          `${API_BASE}/upload-post`,
           {
             method: "POST",
 

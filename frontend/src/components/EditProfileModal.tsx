@@ -232,6 +232,8 @@ const supabase = createClient(
   import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
 );
 
+const API_BASE = import.meta.env.VITE_API_URL ?? 'https://soft-eng-project-trashform.vercel.app';
+
 interface EditProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -314,7 +316,7 @@ export default function EditProfileModal({ isOpen, onClose }: EditProfileModalPr
         avatarUrl = await uploadAvatar(selectedFile);
       }
 
-      const res = await authFetch('http://localhost:8000/profile/me', {
+      const res = await authFetch(`${API_BASE}/profile/me`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

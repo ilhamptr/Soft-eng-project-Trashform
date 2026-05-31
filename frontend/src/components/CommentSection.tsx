@@ -75,6 +75,9 @@ import { Send } from 'lucide-react';
 import type { Comment } from '../context/PostsContext';
 import { useProfile } from '../context/ProfileContext';
 
+
+const API_BASE = import.meta.env.VITE_API_URL ?? 'https://soft-eng-project-trashform.vercel.app';
+
 interface CommentSectionProps {
   postId: string;          // ← tambah postId
   comments: Comment[];
@@ -95,7 +98,7 @@ export default function CommentSection({ postId, comments, onAddComment }: Comme
       setLoading(true);
       try {
         const token = localStorage.getItem('token');
-        const res = await authFetch(`http://localhost:8000/posts/${postId}/comments`, {
+        const res = await authFetch(`${API_BASE}/posts/${postId}/comments`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error('Failed to fetch comments');
@@ -122,7 +125,7 @@ export default function CommentSection({ postId, comments, onAddComment }: Comme
     // Refresh komentar setelah submit
     try {
       const token = localStorage.getItem('token');
-      const res = await authFetch(`http://localhost:8000/posts/${postId}/comments`, {
+      const res = await authFetch(`${API_BASE}/${postId}/comments`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
