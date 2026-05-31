@@ -44,10 +44,10 @@ const PostsContext = createContext<PostsContextType | undefined>(undefined);
 const API_BASE  = import.meta.env.VITE_API_URL ?? 'https://soft-eng-project-trashform.vercel.app';
 
 
-interface PostsProviderProps {
-  children: ReactNode;
+type PostsProviderProps = {
+  children: React.ReactNode
+  initialPosts?: any[] 
 }
-
 function isCurrentUserContent(author: string, authorId?: string, profileName?: string) {
   return (
     authorId === CURRENT_USER_ID ||

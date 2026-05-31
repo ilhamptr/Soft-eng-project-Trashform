@@ -256,8 +256,10 @@ interface ProfileData {
   posts: Post[];
 }
 
-interface ProfilePageProps {
-  onViewProfile?: (userId: string) => void;
+type ProfilePageProps = {
+  userId: string  // tambah ini
+  onBack?: () => void
+  onViewProfile: (userId: string) => void
 }
 
 export default function ProfilePage({ onViewProfile }: ProfilePageProps) {
