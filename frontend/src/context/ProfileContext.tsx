@@ -236,7 +236,7 @@ const register = async (email: string, password: string, username: string) => {
 
   return (
     <ProfileContext.Provider
-      value={{ profile, isLoggedIn, sessionKey, updateProfile, logout, login,register, isOwnPost, isOwnComment,authFetch }}
+      value={{ profile, isLoggedIn, sessionKey, isAuthLoading,updateProfile, logout, login,register, isOwnPost, isOwnComment,authFetch }}
     >
       {children}
     </ProfileContext.Provider>

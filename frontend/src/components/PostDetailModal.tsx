@@ -116,8 +116,9 @@ export default function PostDetailModal({ post, isOpen, onClose, onViewProfile }
             </button>
             {showComments && (
               <CommentSection
-                comments={post.commentList}
-                onAddComment={(text) => addComment(post.id, text)}
+                  postId={String(post.id)}
+                  comments={post.commentList}
+                  onAddComment={(text) => addComment(post.id, text)}
               />
             )}
           </div>
