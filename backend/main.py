@@ -26,7 +26,7 @@ app.add_middleware(
 # ni endpoint API nya
 @app.get("/")
 def root():
-    return {"message": "TRASHFORM API is running 🌱", "version": "1.0.0"}
+    return {"message": "TRASHFORM API is running 🌱", "version": "1.1.0"}
 
 
 @app.get("/auth")
@@ -400,8 +400,6 @@ def get_comments(post_id: str, current_user = Depends(get_current_user)):
     result = []
     for c in res.data:
         username = c["profile"]["username"] if c.get("profile") else "?"
-        print(f"username: {username}")
-        print(f"author_id: {c['user_id']}")
         result.append(CommentResponse(
             id=c["id"],
             author=username,
@@ -410,8 +408,6 @@ def get_comments(post_id: str, current_user = Depends(get_current_user)):
             text=c["content"],       # ← "content" dari DB → "text" ke frontend
             time=format_time(c["created_at"]),
         ))
-    print(result)
-
     return result
 
 
@@ -617,6 +613,33 @@ def get_saved_posts(current_user = Depends(get_current_user)):
         })
 
     return result
+
+@app.delete("/post/{post_id}/delete")
+def delete_post(post_id: str,current_user = Depends(get_current_user)):
+    """HAPUS POSTINGAN USER"""
+    user_id = current_user.id
+
+    # Cek post ada dan milik user ini
+    post_res = (
+        supabase_client.table("posts")
+        .select("id, owner")
+        .eq("id", post_id)
+        .single()
+        .execute()
+    )
+
+    if not post_res.data:
+        raise HTTPException(status_code=404, detail="Post tidak ditemukan")
+
+    if post_res.data["owner"] != user_id:
+        raise HTTPException(status_code=403, detail="Tidak boleh menghapus post milik orang lain")
+
+    # Hapus post — likes & comments otomatis terhapus kalau ada ON DELETE CASCADE
+    supabase_client.table("posts").delete().eq("id", post_id).execute()
+
+    return {"message": "Post berhasil dihapus"}
+
+
 
 if __name__ == "__main__":
     import uvicorn

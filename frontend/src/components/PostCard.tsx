@@ -171,12 +171,8 @@ export default function PostCard({ post, onViewProfile }: PostCardProps) {
         </div>
 
         {showComments && (
-          // <CommentSection
-          //   comments={post.commentList}
-          //   onAddComment={(text) => addComment(post.id, text)}
-          // />
           <CommentSection
-            postId={post.id}   // ← tambah ini
+            postId={post.id} 
             comments={post.commentList}
             onAddComment={(text) => addComment(post.id, text)}
           />

@@ -92,15 +92,7 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   const [isAuthLoading, setIsAuthLoading] = useState(true); // ← default true
 
   
-  const [profile, setProfile] = useState<UserProfile>(() => {
-    try {
-      const saved = localStorage.getItem('userProfile');
-      if (saved) return buildProfile(JSON.parse(saved));
-    } catch (error) {
-      console.error('Error loading profile:', error);
-    }
-    return DEFAULT_PROFILE;
-  });
+  const [profile, setProfile] = useState<UserProfile>(DEFAULT_PROFILE);
 
   const authFetch = useCallback(async (url: string, options?: RequestInit) => {
     const token = localStorage.getItem('token');
@@ -127,19 +119,39 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     const checkAuth = async () => {
       try {
         const token = localStorage.getItem('token');
-        if (!token) {
-          setIsLoggedIn(false);
-          return;
-        }
-        // Validasi token ke backend jika perlu
-        // const res = await fetch('/auth/me', { headers: { Authorization: `Bearer ${token}` } })
-        // if (!res.ok) throw new Error()
+      if (!token) {
+        setIsLoggedIn(false);
+        return;
+      }
+
+      //Fetch profile sekalian validasi token
+      const res = await authFetch(`${API_BASE}/profile/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!res.ok) {
+        localStorage.removeItem('token');
+        setIsLoggedIn(false);
+        return;
+      }
+
+      const p = await res.json();
+
+      //Set profile dari API
+      setProfile({
+        name: p.name,
+        username: p.username,
+        location: '',
+        bio: p.bio ?? '',
+        avatar: p.avatar ?? null,
+        av: p.av,
+      });
         setIsLoggedIn(true);
       } catch {
+        localStorage.removeItem('token'); 
         setIsLoggedIn(false);
-        localStorage.removeItem('token'); // bersihkan token invalid
       } finally {
-        setIsAuthLoading(false); // ← selalu dijalankan
+        setIsAuthLoading(false); 
       }
     };
 
