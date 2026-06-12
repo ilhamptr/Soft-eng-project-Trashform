@@ -30,7 +30,6 @@ export default function PostDetailModal({ post, isOpen, onClose, onViewProfile }
 
     try {
       const token = localStorage.getItem('token');
-      console.log(API_BASE)
       const res = await authFetch(`${API_BASE}/post/${post.id}/delete`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}`},
@@ -108,7 +107,7 @@ export default function PostDetailModal({ post, isOpen, onClose, onViewProfile }
             </div>
             <div className="text-center">
               <p className="text-lg font-semibold text-[#173928]">{post.commentList.length}</p>
-              <p className="text-sm text-[#667d70]">Komentar</p>
+              <p className="text-sm text-[#667d70]">Komentarr</p>
             </div>
             <div className="text-center">
               <p className="text-lg font-semibold text-[#173928]">{post.shares}</p>

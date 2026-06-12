@@ -25,6 +25,8 @@ export default function PostCard({ post, onViewProfile }: PostCardProps) {
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showComments, setShowComments] = useState(false);
+  const [commentCount, setCommentCount] = useState(post.commentList.length);
+
 
   const toggleLike = () => {
     likePost(post.id);
@@ -130,7 +132,7 @@ export default function PostCard({ post, onViewProfile }: PostCardProps) {
         <div className="flex items-center justify-between text-[11px] text-[#60766a] px-1.5 py-1.5 mb-2.5 border-t border-b border-[#e3ece4]">
           <span>{post.likes > 0 ? `${post.likes} orang menyukai` : 'Jadilah yang pertama menyukai'}</span>
           <div className="flex items-center gap-4">
-            <span>{post.commentList.length} komentar</span>
+            <span>{commentCount} komentar</span>
             <span>{post.shares} bagian</span>
           </div>
         </div>
@@ -175,6 +177,8 @@ export default function PostCard({ post, onViewProfile }: PostCardProps) {
             postId={post.id} 
             comments={post.commentList}
             onAddComment={(text) => addComment(post.id, text)}
+            onCommentCountChange={setCommentCount} // ← tambah
+
           />
         )}
       </div>

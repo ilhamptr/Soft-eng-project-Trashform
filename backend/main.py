@@ -301,8 +301,6 @@ limit
 
 
 # routers/interactions.py
-from datetime import datetime, timezone
-
 # ─── Like ─────────────────────────────────────────────────────────────────────
 @app.post("/posts/{post_id}/likes", response_model=LikeResponse)
 def toggle_like(post_id: str, user = Depends(get_current_user)):
@@ -471,7 +469,7 @@ def get_my_profile(current_user: dict = Depends(get_current_user)):
             "liked": len(liked_res.data) > 0,
             "shares": post.get("shares", 0),
             "commentList": [],
-            "time": post["created_at"],
+            "time": format_time(post["created_at"]),
         })
 
     return {
@@ -609,7 +607,7 @@ def get_saved_posts(current_user = Depends(get_current_user)):
             "saved": True,
             "shares": 0,
             "commentList": [],
-            "time": post["created_at"],
+            "time": format_time(post["created_at"]),
         })
 
     return result

@@ -10,9 +10,11 @@ interface CommentSectionProps {
   postId: string;          // ← tambah postId
   comments: Comment[];
   onAddComment: (text: string) => void;
+  onCommentCountChange?: (count: number) => void;
+
 }
 
-export default function CommentSection({ postId, comments, onAddComment }: CommentSectionProps) {
+export default function CommentSection({ postId, comments, onAddComment,onCommentCountChange }: CommentSectionProps) {
   const { profile } = useProfile();
   const [text, setText] = useState('');
   const [localComments, setLocalComments] = useState<Comment[]>(comments);
@@ -32,6 +34,7 @@ export default function CommentSection({ postId, comments, onAddComment }: Comme
         if (!res.ok) throw new Error('Failed to fetch comments');
         const data = await res.json();
         setLocalComments(data);
+        onCommentCountChange?.(data.length); 
       } catch (err) {
         console.error(err);
         setLocalComments(comments); // fallback ke prop
@@ -59,6 +62,7 @@ export default function CommentSection({ postId, comments, onAddComment }: Comme
       if (res.ok) {
         const data = await res.json();
         setLocalComments(data);
+        onCommentCountChange?.(data.length); 
       }
     } catch (err) {
       console.error(err);
